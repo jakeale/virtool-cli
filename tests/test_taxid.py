@@ -1,25 +1,36 @@
-import pytest
-import os
 import json
+import os
 import subprocess
+import shutil
 
-TEST_PATH = "tests/files/src_a"
+import pytest
+
+TEST_PATH = "tests/files/src_taxid"
+TEST_SRC = "src_taxid"
 
 
 @pytest.fixture(scope="session", autouse=True)
-def command():
+def output(tmpdir_factory):
+    return tmpdir_factory.getbasetemp()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def run(output):
+    dest = shutil.copytree(TEST_PATH, os.path.join(output, "src"))
     command = [
         "python", "virtool_cli/run.py",
         "taxid", "-src",
-        TEST_PATH, "-f"]
+        dest, "-f"]
     subprocess.call(command)
+
+    return dest
 
 
 @pytest.mark.parametrize("path", ["h/hop_stunt_viroid", "r/reovirus_tf1_(not_a_plant_virus)",
                                   "t/tobacco_mosaic_virus", "t/totivirus_tf1_(not_a_plant_virus)"])
-def test_taxid(path, command):
-    path = os.path.join(TEST_PATH, path)
-    print(path)
+def test_taxid(path, run, output):
+    path = os.path.join(run, path)
+
     with open(os.path.join(path, "otu.json"), 'r') as f:
         otu = json.load(f)
 
