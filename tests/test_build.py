@@ -1,8 +1,9 @@
-import os
 import json
+import os
+import subprocess
+
 import arrow
 import pytest
-import subprocess
 
 TEST_PATH = "tests/files/reference.json"
 TEST_WITH_INDENT_PATH = "tests/files/reference_with_indent.json"

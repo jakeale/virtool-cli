@@ -1,6 +1,7 @@
-import pytest
-import subprocess
 import filecmp
+import subprocess
+
+import pytest
 
 TEST_PATH = "tests/files/reference.json"
 TEST_WITH_INDENT_PATH = "tests/files/reference_with_indent.json"
@@ -33,4 +34,3 @@ def test_divide(command, src, output, tmpdir):
     comparison = filecmp.dircmp(TEST_DIRECTORY_PATH, output)
 
     assert len(comparison.diff_files) == 0
-
